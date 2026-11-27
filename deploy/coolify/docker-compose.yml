@@ -1,0 +1,104 @@
+# tg-FeedbackOS in Coolify (service "tg-feedbackos" on NAFDO), modelled on PayGlue's
+# quackback service. Coolify fills the SERVICE_* variables; nothing secret lives here.
+# Paste as a Docker Compose service, set the domain hub.toolgui.de on "app" (port 3000)
+# after the DNS record exists, then fill the variables marked "set in Coolify".
+services:
+  app:
+    image: ghcr.io/toolgui-de/tg-feedbackos:0.16.1-tg1
+    restart: unless-stopped
+    init: true
+    environment:
+      - SERVICE_URL_APP_3000
+      - BASE_URL=${SERVICE_URL_APP}
+      - TRUSTED_PROXY_HOPS=1
+      - SECRET_KEY=${SERVICE_BASE64_64_SECRET}
+      - DATABASE_URL=postgresql://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/tgfeedbackos
+      - S3_ENDPOINT=http://minio:9000
+      - S3_BUCKET=tgfeedbackos
+      - S3_REGION=us-east-1
+      - S3_FORCE_PATH_STYLE=true
+      - S3_PROXY=true
+      - S3_ACCESS_KEY_ID=${SERVICE_USER_MINIO}
+      - S3_SECRET_ACCESS_KEY=${SERVICE_PASSWORD_MINIO}
+      - DISABLE_TELEMETRY=true
+      - AI_CHAT_MODEL=off
+      - AI_EMBEDDING_MODEL=off
+      # Mail: set in Coolify once the Resend domain and the support mailbox exist
+      - EMAIL_FROM=${EMAIL_FROM:-ToolGui.de <hub@toolgui.de>}
+      - EMAIL_APP_NAME=ToolGui.de
+      - EMAIL_LOGO_URL=https://toolgui.de/apple-touch-icon.png
+      - EMAIL_RESEND_API_KEY=${EMAIL_RESEND_API_KEY:-}
+      - EMAIL_INBOUND_PROVIDER=${EMAIL_INBOUND_PROVIDER:-}
+      - EMAIL_INBOUND_DOMAIN=${EMAIL_INBOUND_DOMAIN:-}
+      - IMAP_HOST=${IMAP_HOST:-}
+      - IMAP_PORT=${IMAP_PORT:-993}
+      - IMAP_TLS=true
+      - IMAP_USER=${IMAP_USER:-}
+      - IMAP_PASSWORD=${IMAP_PASSWORD:-}
+      - IMAP_MAILBOX=${IMAP_MAILBOX:-INBOX}
+      # The first owner account (set in Coolify)
+      - SETUP_OWNER_EMAIL=${SETUP_OWNER_EMAIL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3000/api/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg18
+    restart: unless-stopped
+    command: postgres -c max_connections=200
+    environment:
+      - POSTGRES_DB=tgfeedbackos
+      - POSTGRES_USER=${SERVICE_USER_POSTGRES}
+      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - tg-feedbackos-postgres:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: pgsty/silo:RELEASE.2026-11-12T00-00-00Z@sha256:c20d112390b9a9ce8c11b8af95ad35bcaa62f4759663c09c936cd8d2b511f329
+    restart: unless-stopped
+    command: server /data
+    environment:
+      - MINIO_ROOT_USER=${SERVICE_USER_MINIO}
+      - MINIO_ROOT_PASSWORD=${SERVICE_PASSWORD_MINIO}
+    volumes:
+      - tg-feedbackos-files:/data
+    healthcheck:
+      test: ['CMD', 'silo', 'healthcheck', 'ready']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio-init:
+    image: pgsty/mc:RELEASE.2026-10-26T00-00-00Z@sha256:ce62c9053c69ce12a527a322345b5ad9f44b5f8a7b8189f82e516f2e3f30f1d8
+    restart: 'no'
+    environment:
+      - MINIO_ROOT_USER=${SERVICE_USER_MINIO}
+      - MINIO_ROOT_PASSWORD=${SERVICE_PASSWORD_MINIO}
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c 'mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" && mc mb --ignore-existing local/tgfeedbackos'
+
+volumes:
+  tg-feedbackos-postgres:
+  tg-feedbackos-files:

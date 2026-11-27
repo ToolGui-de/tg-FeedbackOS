@@ -20,6 +20,9 @@ licensing.
 - The "Source code" link in the portal points at this repository.
 - Sign-in and account emails, which carry no workspace name, take the name
   for logo and wordmark from `EMAIL_APP_NAME` instead of "Quackback".
+- The Docker workflow builds only the app image; the browser reader sidecar
+  ("Import your brand") is not run by the hub.
+- `deploy/coolify/docker-compose.yml` is the Coolify service on NAFDO.
 - README and security policy name ToolGui.de and its contact.
 
 Everything below is what FeedbackOS changes compared to Quackback, kept as it is.

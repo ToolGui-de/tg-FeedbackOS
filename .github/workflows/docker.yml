@@ -30,14 +30,14 @@ jobs:
   # image runs `bun install` plus two Vite/TanStack production builds, which are
   # far too slow under arm64 emulation (and risk job timeouts).
   #
-  # Two images: the app, and the browser reader sidecar (docker/browser), which
-  # is published beside it as <repo>-browser so self-hosters and cloud pull it
-  # instead of building it.
+  # tg-FeedbackOS: only the app image. The browser reader sidecar
+  # (docker/browser, for "Import your brand") is not run by the hub, so it is
+  # not built; add it back to both matrices if that feature is wanted.
   build:
     strategy:
       fail-fast: false
       matrix:
-        image: [app, browser]
+        image: [app]
         platform: [linux/amd64, linux/arm64]
         include:
           - platform: linux/amd64
@@ -47,9 +47,6 @@ jobs:
           - image: app
             file: ./apps/web/Dockerfile
             suffix: ''
-          - image: browser
-            file: ./docker/browser/Dockerfile
-            suffix: '-browser'
     runs-on: ${{ matrix.runner }}
     permissions:
       contents: read
@@ -126,8 +123,6 @@ jobs:
         include:
           - image: app
             suffix: ''
-          - image: browser
-            suffix: '-browser'
     permissions:
       contents: read
       packages: write
