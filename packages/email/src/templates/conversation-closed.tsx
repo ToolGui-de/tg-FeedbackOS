@@ -20,7 +20,7 @@ const muted: React.CSSProperties = {
   margin: '0 0 12px',
 }
 
-/** FeedbackOS: in the PayGlue mail look, like the conversation reply. */
+/** FeedbackOS: in the workspace mail look, like the conversation reply. */
 export function ConversationClosedEmail({
   workspaceName,
   variant,

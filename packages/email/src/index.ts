@@ -29,7 +29,7 @@ import { reportSesTenantPaused, resolveSesTenant } from './tenant-hooks'
 
 /**
  * FeedbackOS: a display name on the signed reply address, so a mail client
- * shows "PayGlue Support" when the customer replies instead of the long
+ * shows "ToolGui.de Support" when the customer replies instead of the long
  * plus-addressed route home. The address itself is unchanged.
  */
 function namedReplyTo(address: string | undefined, workspaceName: string): string | undefined {

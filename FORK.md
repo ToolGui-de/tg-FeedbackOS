@@ -1,14 +1,44 @@
-# FeedbackOS: how this fork differs from Quackback
+# tg-FeedbackOS: how this fork differs
 
-FeedbackOS is a fork of [Quackback](https://github.com/QuackbackIO/quackback),
-licensed under the [AGPL-3.0](LICENSE). It has been modified since October 2026
-by PayGlue. The complete source code of the running instance lives in this
-repository, on the `payglue` branch, and changes from Quackback are merged in
-regularly.
+tg-FeedbackOS is the hub of ToolGui.de (hub.toolgui.de). It is a fork of
+[FeedbackOS](https://github.com/PayGlue/FeedbackOS), PayGlue's fork of
+[Quackback](https://github.com/QuackbackIO/quackback), licensed under the
+[AGPL-3.0](LICENSE). The complete source code of the running instance lives in
+this repository, on the `toolgui` branch.
 
 "Quackback" is the name of the original project. This fork is not affiliated
 with, and is not endorsed by, the Quackback project or its maintainers. The names
-and logos "FeedbackOS" and "PayGlue" are not part of the AGPL licensing.
+and logos "ToolGui.de", "FeedbackOS" and "PayGlue" are not part of the AGPL
+licensing.
+
+## Changes on top of FeedbackOS
+
+- Emails use the ToolGui.de look: pale blue page, white card, orange buttons,
+  blue links, and the workspace name drawn as a wordmark like the logo
+  ("Tool" in orange, "Gui.de" in blue). The maintenance notice box is light to
+  match.
+- The "Source code" link in the portal points at this repository.
+- Sign-in and account emails, which carry no workspace name, take the name
+  for logo and wordmark from `EMAIL_APP_NAME` instead of "Quackback".
+- README and security policy name ToolGui.de and its contact.
+
+Everything below is what FeedbackOS changes compared to Quackback, kept as it is.
+
+## Updating from FeedbackOS
+
+FeedbackOS merges Quackback regularly (PayGlue ticket PG-381). This fork takes
+those updates from FeedbackOS, not from Quackback directly, so PayGlue's conflict
+resolutions come along:
+
+- Remotes: `payglue` (https://github.com/PayGlue/FeedbackOS, push disabled) and
+  `quackback` (push disabled). Never push to either.
+- Fetch `payglue/payglue`, merge it with `git merge --no-ff` on a branch named
+  `upstream-sync/<feedbackos-commit>`, open a pull request against `toolgui` and
+  merge it with a merge commit.
+- Then build the image with the Docker workflow (dispatch on `toolgui`, with
+  `image_tag`) and roll it out in Coolify (service tg-feedbackos on NAFDO).
+
+# FeedbackOS: how it differs from Quackback
 
 ## Changes
 
@@ -18,8 +48,8 @@ and logos "FeedbackOS" and "PayGlue" are not part of the AGPL licensing.
 - The admin uses the workspace name and favicon in the browser tab.
 - Error and not-found pages show the workspace logo and, as full pages, the
   workspace theme instead of the Quackback duck and palette.
-- Emails use the PayGlue look: logo and wordmark above a dark card, indigo
-  buttons and links. Conversation emails to customers (replies, acknowledgement,
+- Emails use the workspace look: logo and wordmark above the card (in
+  FeedbackOS a dark card with indigo buttons and links, here the ToolGui.de look). Conversation emails to customers (replies, acknowledgement,
   closed) use the same layout with the subject as heading.
 - The launcher greeting uses the waving hand with a skin tone (👋🏻) in every
   language.
@@ -76,10 +106,11 @@ and logos "FeedbackOS" and "PayGlue" are not part of the AGPL licensing.
 
 ## Configuration added by this fork
 
-| Variable              | Purpose                                                     |
-| --------------------- | ----------------------------------------------------------- |
-| `EMAIL_LOGO_URL`      | Logo for emails sent without a workspace logo               |
-| `IMAP_MARK_SEEN_ALSO` | Further mailboxes in which a handled message is marked seen |
+| Variable              | Purpose                                                                    |
+| --------------------- | -------------------------------------------------------------------------- |
+| `EMAIL_LOGO_URL`      | Logo for emails sent without a workspace logo                              |
+| `EMAIL_APP_NAME`      | Name and wordmark for emails sent without a workspace name (tg-FeedbackOS) |
+| `IMAP_MARK_SEEN_ALSO` | Further mailboxes in which a handled message is marked seen                |
 
 ## Maintaining the fork
 

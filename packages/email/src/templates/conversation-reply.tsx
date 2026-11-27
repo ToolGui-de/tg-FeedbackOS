@@ -5,7 +5,7 @@ import { colors, eyebrow, typography } from './shared-styles'
 /**
  * Correspondence for the email channel: the agent's words are the body.
  *
- * FeedbackOS: drawn in the PayGlue mail look (logo and wordmark above a dark
+ * FeedbackOS: drawn in the workspace mail look (logo and wordmark above the
  * card, an uppercase support line, the subject as heading), so a customer gets
  * the same mail from support that they get from the rest of the product. Still
  * no unsubscribe and no intro: the message is the content.

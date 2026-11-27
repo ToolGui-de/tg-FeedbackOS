@@ -41,7 +41,8 @@ interface EmailLayoutProps {
 export function EmailLayout({
   preview,
   logoUrl,
-  logoAlt = 'Quackback',
+  // tg-FeedbackOS: sign-in and account mails pass no name; EMAIL_APP_NAME fills in
+  logoAlt = process.env.EMAIL_APP_NAME || 'Quackback',
   children,
   footer,
   showPoweredBy: showPoweredByOverride,
@@ -100,7 +101,7 @@ export function EmailLayout({
   )
 }
 
-/** "PayGlue" as Pay + Glue; a name without an inner capital stays as it is. */
+/** "ToolGui.de" as Tool + Gui.de; a name without an inner capital stays as it is. */
 function Wordmark({ name }: { name: string }) {
   const split = /^([A-Z][a-z0-9]+)([A-Z].*)$/.exec(name)
   if (!split) return <>{name}</>

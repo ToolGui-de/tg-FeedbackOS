@@ -9,28 +9,30 @@
 // conversation and ticket mails), configurable per install.
 export const DEFAULT_LOGO_URL = process.env.EMAIL_LOGO_URL || 'https://quackback.io/logo.png'
 
-// FeedbackOS: PayGlue's mail look, the same dark shell the PayGlue dashboard
-// sends its own account mails in (slate background, raised card, indigo).
+// tg-FeedbackOS: the ToolGui.de mail look, the same light shell toolgui.de
+// sends its own mails in (pale blue page, white card, orange buttons, blue links).
 export const colors = {
-  // Indigo, the PayGlue primary (buttons, accents)
-  primary: '#4f46e5',
-  primaryDark: '#4338ca',
-  // Lighter indigo for links on the dark card
-  link: '#818cf8',
+  // Orange, the ToolGui.de button colour (dark enough for white text)
+  primary: '#CF4900',
+  primaryDark: '#A63A00',
+  // ToolGui.de blue for links and accents on the white card
+  link: '#034A84',
+  // Orange of the logo, for the first part of the wordmark
+  brandAccent: '#FF5A00',
 
   // Text colors
-  heading: '#f8fafc', // slate-50
-  text: '#cbd5e1', // slate-300
-  textMuted: '#94a3b8', // slate-400
-  textLight: '#64748b', // slate-500
+  heading: '#0F172A',
+  text: '#334155',
+  textMuted: '#5A6B7B',
+  textLight: '#64748B',
 
   // Background colors
-  background: '#0f172a', // slate-900, page
-  surface: '#1e293b', // slate-800, card
-  surfaceMuted: '#0f172a', // quote boxes inside the card
+  background: '#EAF1F8', // page
+  surface: '#FFFFFF', // card
+  surfaceMuted: '#F3F7FB', // quote and code boxes inside the card
 
   // Border
-  border: '#334155', // slate-700
+  border: '#D6E2EE',
 }
 
 // Common layout styles
@@ -151,13 +153,13 @@ export const branding = {
     display: 'block' as const,
     borderRadius: '6px',
   },
-  // A CamelCase name ("PayGlue") is drawn as a wordmark: first part in the
-  // link indigo, the rest in white, like the PayGlue dashboard mails.
+  // A CamelCase name ("ToolGui.de") is drawn as a wordmark like the logo:
+  // first part in orange, the rest in ToolGui.de blue.
   appNameAccent: {
-    color: colors.link,
+    color: colors.brandAccent,
   },
   appName: {
-    color: colors.heading,
+    color: colors.link,
     fontSize: '18px',
     fontWeight: '800',
     letterSpacing: '-0.3px',
@@ -175,7 +177,7 @@ export const replyMarker = {
   textAlign: 'center' as const,
 }
 
-// Small uppercase line above the heading ("PAYGLUE SUPPORT")
+// Small uppercase line above the heading ("TOOLGUI.DE SUPPORT")
 export const eyebrow = {
   color: colors.link,
   fontSize: '12px',

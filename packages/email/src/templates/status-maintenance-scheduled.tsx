@@ -3,9 +3,10 @@ import { EmailLayout, NotificationFooter } from './email-layout'
 import { typography, button } from './shared-styles'
 import { withLineBreaks } from './line-breaks'
 
-const MAINTENANCE_BLUE = '#60a5fa'
-const MAINTENANCE_BLUE_BG = '#172554'
-const MAINTENANCE_BLUE_BORDER = '#1e3a8a'
+// tg-FeedbackOS: light blue box for the white mail card
+const MAINTENANCE_BLUE = '#034A84'
+const MAINTENANCE_BLUE_BG = '#F3F7FB'
+const MAINTENANCE_BLUE_BORDER = '#D6E2EE'
 
 interface StatusMaintenanceScheduledEmailProps {
   workspaceName: string
