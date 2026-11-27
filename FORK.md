@@ -25,6 +25,8 @@ licensing.
 - `deploy/coolify/docker-compose.yml` is the Coolify service on NAFDO.
 - Saving one customer stage label (Settings > Ticket statuses) keeps the other
   saved labels instead of resetting them to the defaults.
+- From FeedbackOS (cherry-picked ahead of the next sync): ticket previews in the
+  messenger resolve the widget's own session, so customers see their ticket card.
 - README and security policy name ToolGui.de and its contact.
 
 Everything below is what FeedbackOS changes compared to Quackback, kept as it is.
