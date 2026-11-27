@@ -23,6 +23,8 @@ licensing.
 - The Docker workflow builds only the app image; the browser reader sidecar
   ("Import your brand") is not run by the hub.
 - `deploy/coolify/docker-compose.yml` is the Coolify service on NAFDO.
+- Saving one customer stage label (Settings > Ticket statuses) keeps the other
+  saved labels instead of resetting them to the defaults.
 - README and security policy name ToolGui.de and its contact.
 
 Everything below is what FeedbackOS changes compared to Quackback, kept as it is.

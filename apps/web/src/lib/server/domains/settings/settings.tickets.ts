@@ -84,7 +84,11 @@ export async function setStageLabels(
   log.info('update ticket stage labels')
   try {
     const validated = stageLabelsSchema.parse(input)
-    const merged = { ...DEFAULT_TICKET_STAGE_LABELS, ...validated }
+    // tg-FeedbackOS: merge over the saved labels, not the defaults. The settings
+    // card saves one field at a time, so merging over the defaults reset every
+    // other label to English on each save.
+    const org = await requireSettingsCached()
+    const merged = { ...resolveStageLabels(org.metadata), ...validated }
     await writeMetadataKey(STAGE_LABELS_KEY, merged)
     return merged
   } catch (error) {
