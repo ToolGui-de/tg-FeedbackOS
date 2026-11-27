@@ -22,7 +22,11 @@ services:
       - S3_ACCESS_KEY_ID=${SERVICE_USER_MINIO}
       - S3_SECRET_ACCESS_KEY=${SERVICE_PASSWORD_MINIO}
       - DISABLE_TELEMETRY=true
-      # AI: no override here, the key is set in the admin
+      # AI through OpenAI (key and models set in Coolify)
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      - AI_CHAT_MODEL=${AI_CHAT_MODEL:-gpt-4.1-mini}
+      - AI_EMBEDDING_MODEL=${AI_EMBEDDING_MODEL:-text-embedding-3-small}
       - SETUP_OWNER_EMAIL=andre@nafdo.de
       # Sending through Resend (own ToolGui.de account; key set in Coolify)
       - EMAIL_FROM=ToolGui.de - Team <team@toolgui.de>
