@@ -22,8 +22,7 @@ services:
       - S3_ACCESS_KEY_ID=${SERVICE_USER_MINIO}
       - S3_SECRET_ACCESS_KEY=${SERVICE_PASSWORD_MINIO}
       - DISABLE_TELEMETRY=true
-      - AI_CHAT_MODEL=off
-      - AI_EMBEDDING_MODEL=off
+      # AI: no override here, the key is set in the admin
       - SETUP_OWNER_EMAIL=andre@nafdo.de
       # Sending through Resend (own ToolGui.de account; key set in Coolify)
       - EMAIL_FROM=ToolGui.de - Team <team@toolgui.de>
