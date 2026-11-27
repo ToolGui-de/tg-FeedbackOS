@@ -26,6 +26,8 @@ import {
   SesTenantPausedError,
 } from './ses'
 import { reportSesTenantPaused, resolveSesTenant } from './tenant-hooks'
+// tg-FeedbackOS: German wording for every mail when EMAIL_LANG=de
+import { emailLanguageIsGerman, translateEmail } from './translate-de'
 
 /**
  * FeedbackOS: a display name on the signed reply address, so a mail client
@@ -418,6 +420,13 @@ async function dispatch(
   // One line, whatever the template built: a provider may reject a subject with
   // a line break outright. Rebound so every rung and ledger row sees the same.
   options = { ...options, subject: singleLineSubject(options.subject) }
+  // tg-FeedbackOS: EMAIL_LANG=de sends the template wording in German (./translate-de)
+  const german = emailLanguageIsGerman()
+  const mailType = options.emailType ?? 'RawEmail'
+  if (german)
+    options.subject = singleLineSubject(
+      translateEmail({ subject: options.subject, emailType: mailType }).subject
+    )
   const threadingHeaders = buildThreadingHeaders(options)
 
   // Defense in depth: the synthetic anonymous placeholder domain
@@ -495,9 +504,12 @@ async function dispatch(
         callerName: options.fromDisplayName,
       })
   const from = displayName ? applyDisplayName(resolvedFrom, displayName) : resolvedFrom
-  const html = options.html ?? (options.react ? await render(options.react) : undefined)
-  const text =
+  let html = options.html ?? (options.react ? await render(options.react) : undefined)
+  let text =
     options.text ?? (options.react ? await render(options.react, { plainText: true }) : undefined)
+  // tg-FeedbackOS: the rendered body too (subject done above)
+  if (german)
+    ({ html, text } = translateEmail({ subject: options.subject, html, text, emailType: mailType }))
 
   if (provider === 'ses') {
     // Message-ID is platform-controlled: the transport drops ours on the way

@@ -28,6 +28,12 @@ licensing.
 - From FeedbackOS (cherry-picked ahead of the next sync): ticket previews in the
   messenger resolve the widget's own session, so customers see their ticket card.
 - README and security policy name ToolGui.de and its contact.
+- With `EMAIL_LANG=de` every email goes out in German: the send path
+  (`dispatch` in `packages/email/src/index.ts`) runs subject, HTML and plain
+  text through `packages/email/src/translate-de.ts`, so the templates stay as
+  upstream wrote them. Links and the reply marker are never touched; names,
+  titles and messages are kept, since a phrase only matches a whole text node
+  of its own template.
 
 Everything below is what FeedbackOS changes compared to Quackback, kept as it is.
 
@@ -124,6 +130,7 @@ resolutions come along:
 | --------------------- | -------------------------------------------------------------------------- |
 | `EMAIL_LOGO_URL`      | Logo for emails sent without a workspace logo                              |
 | `EMAIL_APP_NAME`      | Name and wordmark for emails sent without a workspace name (tg-FeedbackOS) |
+| `EMAIL_LANG`          | `de` sends every email in German, otherwise English (tg-FeedbackOS)        |
 | `IMAP_MARK_SEEN_ALSO` | Further mailboxes in which a handled message is marked seen                |
 
 ## Maintaining the fork
